@@ -1,0 +1,116 @@
+<!-- templates/debug.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对话调试工具</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>对话系统调试工具</h1>
+
+    <div class="section">
+        <h2>1. 测试对话功能</h2>
+        <button onclick="testConversation()">测试对话添加和统计</button>
+        <div id="test-result"></div>
+    </div>
+
+    <div class="section">
+        <h2>2. 检查当前会话</h2>
+        <div>
+            <label for="session-id">会话ID:</label>
+            <input type="text" id="session-id" placeholder="输入会话ID" style="width: 300px;">
+            <button onclick="checkSession()">检查会话</button>
+        </div>
+        <div id="session-result"></div>
+    </div>
+
+    <div class="section">
+        <h2>3. 查看系统日志</h2>
+        <button onclick="viewLogs()">查看最新日志</button>
+        <div id="logs-result"></div>
+    </div>
+
+    <script>
+        async function testConversation() {
+            const resultDiv = document.getElementById('test-result');
+            resultDiv.innerHTML = '<p>测试中...</p>';
+
+            try {
+                const response = await fetch('/api/test/conversation');
+                const data = await response.json();
+
+                let html = `<h3 class="success">测试成功</h3>`;
+                html += `<p>测试会话ID: ${data.test_session_id}</p>`;
+                html += `<p>消息数量: ${data.message_count}</p>`;
+                html += `<p>摘要结果: ${data.summary_result}</p>`;
+                html += `<h4>所有消息:</h4><pre>${JSON.stringify(data.all_messages, null, 2)}</pre>`;
+                html += `<h4>统计信息:</h4><pre>${JSON.stringify(data.stats, null, 2)}</pre>`;
+
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">测试失败: ${error.message}</p>`;
+            }
+        }
+
+        async function checkSession() {
+            const sessionId = document.getElementById('session-id').value;
+            if (!sessionId) {
+                alert('请输入会话ID');
+                return;
+            }
+
+            const resultDiv = document.getElementById('session-result');
+            resultDiv.innerHTML = '<p>检查中...</p>';
+
+            try {
+                const response = await fetch(`/api/conversation/${encodeURIComponent(sessionId)}`);
+                const data = await response.json();
+
+                let html = `<h3>会话状态</h3>`;
+                html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+                // 尝试生成摘要
+                const summaryResponse = await fetch(`/api/conversation/${encodeURIComponent(sessionId)}/summary`, {
+                    method: 'POST'
+                });
+                const summaryData = await summaryResponse.json();
+
+                html += `<h3>摘要生成测试</h3>`;
+                html += `<pre>${JSON.stringify(summaryData, null, 2)}</pre>`;
+
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">检查失败: ${error.message}</p>`;
+            }
+        }
+
+        async function viewLogs() {
+            const resultDiv = document.getElementById('logs-result');
+            resultDiv.innerHTML = '<p>加载日志...</p>';
+
+            try {
+                // 这里需要实现一个日志查看端点
+                const response = await fetch('/api/debug/logs');
+                const data = await response.json();
+
+                let html = `<h3>系统日志</h3>`;
+                html += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">无法加载日志: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

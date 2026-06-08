@@ -1,0 +1,52 @@
+system:
+  name: "物流智能问答系统"
+  version: "2.0.0"
+  mode: "enhanced"  # basic: 基础RAG, enhanced: 增强RAG
+
+models:
+  provider: "deepseek"
+  llm: "qwen3.5:9b"
+  embedding: "nomic-embed-text-v2-moe:latest"
+  temperature: 0.3
+  max_tokens: 1024
+
+deepseek:
+  model: "deepseek-v4-pro"
+  base_url: "https://api.deepseek.com"
+  api_key_env: "DEEPSEEK_API_KEY"
+  timeout: 120
+
+ollama:
+  base_url: "http://localhost:11434"
+  timeout: 120
+
+vector_store:
+  collection_name: "logistics_knowledge"
+  persist_directory: "./chroma_db"
+  search_k: 5
+
+rag:
+  enable_function_call: true
+  function_call_mode: "auto"  # auto, always, never
+
+knowledge_base:
+  data_dir: "./data"
+  main_file: "logistics_knowledge.txt"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  enable_websocket: true
+
+tools:
+  enabled_categories: ["calculator", "logistics", "web"]
+  disabled_tools: []
+
+logging:
+  level: "INFO"
+  file: "logistics_system.log"
+
+# Windows特定配置
+windows:
+  use_ascii_only: true  # 是否只使用ASCII字符避免编码问题
+  console_encoding: "utf-8"
