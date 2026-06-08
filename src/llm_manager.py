@@ -8,7 +8,7 @@ from typing import Optional, Dict, Any
 
 import httpx
 from langchain_community.llms import Ollama
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from langchain_core.messages import BaseMessage
 from langchain_core.runnables import RunnableLambda
 

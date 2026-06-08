@@ -1,9 +1,9 @@
-# Core dependencies
 langchain==0.3.27
 langchain-community==0.3.27
 langchain-core==0.3.76
 langchain-chroma==0.2.6
 langchain-text-splitters==0.3.9
+langchain-ollama==0.3.1
 chromadb==1.0.20
 ollama==0.5.0
 

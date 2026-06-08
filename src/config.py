@@ -25,7 +25,7 @@ class ModelConfig(BaseModel):
 
 class DeepSeekConfig(BaseModel):
     model: str = "deepseek-chat"
-    base_url: str = "https://api.deepseek.com/v1"
+    base_url: str = "https://api.deepseek.com/"
     api_key_env: str = "DEEPSEEK_API_KEY"
     timeout: int = 120
 

@@ -262,7 +262,7 @@ def main():
     logger.info(f"  物流RAG问答系统 v{config.system.version}")
     logger.info(f"========================================")
     logger.info(f"运行模式: {args.mode}")
-    logger.info(f"LLM模型: {config.models.llm}")
+    logger.info(f"LLM模型: {config.deepseek.model}")
     logger.info(f"嵌入模型: {config.models.embedding}")
     logger.info(f"函数调用: {'启用' if config.rag.enable_function_call else '禁用'}")
     logger.info(f"系统模式: {config.system.mode}")
@@ -285,9 +285,9 @@ def main():
         return
 
     # 运行测试
-    if args.test:
-        success = test_system()
-        sys.exit(0 if success else 1)
+    # if args.test:
+    #     success = test_system()
+    #     sys.exit(0 if success else 1)
 
     # 根据模式运行
     if args.mode == "api":

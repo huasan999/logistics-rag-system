@@ -72,7 +72,8 @@ class RAGPipeline:
         # 构建RAG链
         rag_chain = (
             {
-                "context": self.retriever | RunnableLambda(format_docs),
+                # "context": self.retriever | RunnableLambda(format_docs),
+                "context": RunnableLambda(lambda inputs: inputs["question"]) | self.retriever | RunnableLambda(format_docs),
                 "question": RunnablePassthrough(),
                 "current_time": RunnableLambda(lambda _: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             }
@@ -119,7 +120,7 @@ class RAGPipeline:
         # 构建RAG链
         rag_chain = (
                 {
-                    "context": self.retriever | RunnableLambda(format_docs),
+                    "context": RunnableLambda(lambda inputs: inputs["question"]) | self.retriever | RunnableLambda(format_docs),
                     "conversation_context": RunnablePassthrough(),
                     "question": RunnablePassthrough(),
                     "current_time": RunnableLambda(lambda _: datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
