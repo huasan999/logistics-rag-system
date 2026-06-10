@@ -1,4 +1,4 @@
-"""
+﻿"""
 物流RAG系统主程序入口
 """
 import os
@@ -267,7 +267,7 @@ def main():
     logger.info(f"函数调用: {'启用' if config.rag.enable_function_call else '禁用'}")
     logger.info(f"系统模式: {config.system.mode}")
 
-    # 处理初始化知识库
+    # 初始化物流知识库
     if args.init_kb:
         logger.info("初始化知识库...")
         from src.document_processor import DocumentProcessor
